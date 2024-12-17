@@ -3,8 +3,6 @@ Aqui está um README.md detalhado e estilizado para o GitHub com emojis e um lay
 ```markdown
 # 🚀 SSH Brute Force Enumerator 🔑
 
-https://img.shields.io/badge/CTF-Tool-blue?style=for-the-badge
-
 ![CTF Tool] (https://img.shields.io/badge/CTF-Tool-blue?style=for-the-badge)
 ![Python](https://img.shields.io/badge/Python-3.10+-yellow?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Active-green?style=for-the-badge)
